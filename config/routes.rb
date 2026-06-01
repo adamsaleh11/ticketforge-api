@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  # Auth endpoints (login/logout/signup/me) are intentionally deferred to a
-  # follow-up phase. The User model + devise-jwt warden strategies are wired up,
-  # but no Devise routes are mounted yet. See plans/scaffold-initial-app.md.
+  # Authentication is handled by verifying Supabase-issued JWTs via the
+  # Authenticatable concern on ApplicationController.
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -15,6 +14,10 @@ Rails.application.routes.draw do
   # (auth, projects, tickets, ...). See CLAUDE.md routing rules.
   namespace :api do
     namespace :v1 do
+      # Current authenticated user's profile.
+      get "me", to: "users#show"
+
+      resources :projects, only: %i[index show create update destroy]
     end
   end
 end

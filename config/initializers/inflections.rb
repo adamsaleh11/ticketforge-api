@@ -14,3 +14,9 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym "RESTful"
 # end
+
+# Acronyms so Zeitwerk maps app/services/llm/ to the LLM:: namespace
+# (otherwise it would expect Llm::).
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.acronym "LLM"
+end

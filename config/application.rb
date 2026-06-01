@@ -40,5 +40,18 @@ module TicketforgeApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Active Record encryption keys for `encrypts` attributes (e.g. the GitHub
+    # access token on User). Sourced from the environment so secrets live with the
+    # rest of the env-var config (Render in prod, .env in dev) rather than being
+    # coupled to master.key. The test environment sets fixed values of its own.
+    unless Rails.env.test?
+      config.active_record.encryption.primary_key =
+        ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
+      config.active_record.encryption.deterministic_key =
+        ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
+      config.active_record.encryption.key_derivation_salt =
+        ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
+    end
   end
 end

@@ -62,8 +62,14 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 
-  # The test database is the shared Supabase database. Disable automatic schema
-  # maintenance so the suite never purges/reloads it — apply schema changes via
-  # `bin/rails db:migrate` instead.
-  config.active_record.maintain_test_schema = false
+  # Fixed Supabase config so the suite is deterministic and requires no local
+  # .env. SUPABASE_URL is the base for the JWKS endpoint the Verifier reads;
+  # the auth JWT helper signs ES256 tokens whose public key is served from a
+  # stubbed JWKS at this host.
+  ENV["SUPABASE_URL"] ||= "https://test.supabase.co"
+
+  # Deterministic Active Record encryption keys for the test environment.
+  config.active_record.encryption.primary_key = "test_primary_key_000000000000000000000000"
+  config.active_record.encryption.deterministic_key = "test_deterministic_key_0000000000000000000"
+  config.active_record.encryption.key_derivation_salt = "test_key_derivation_salt_00000000000000000"
 end

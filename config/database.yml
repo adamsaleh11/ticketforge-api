@@ -25,13 +25,12 @@ development:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
 
-# WARNING: test shares the same Supabase database as development (your choice).
-# RSpec uses transactional fixtures, so per-test data is rolled back — but DO NOT
-# run `db:test:prepare`, `db:reset`, or `db:test:purge` against this; they drop
-# every table in the Supabase database.
+# Test runs against a LOCAL Postgres database so the suite is fast, isolated, and
+# can never touch Supabase data. The explicit url overrides any DATABASE_URL that
+# dotenv loads in the test environment.
 test:
   <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  url: <%= ENV.fetch("TEST_DATABASE_URL", "postgresql://localhost:5432/ticketforge_api_test") %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

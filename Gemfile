@@ -35,17 +35,15 @@ gem "bootsnap", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors", "~> 2.0"
 
-# Authentication (JSON/JWT, API-only)
-gem "devise", "~> 4.9"
-gem "devise-jwt", "~> 0.12"
+# Decode/verify Supabase-issued JWTs (auth middleware lands in a follow-up ticket)
+gem "jwt", "~> 2.8"
 
 # JSON:API serialization for response payloads
 gem "jsonapi-serializer", "~> 2.2"
 
-# External HTTP clients: Groq (OpenAI-compatible), Ollama, GitHub
+# External HTTP clients (Groq, GitHub, etc.)
 gem "httparty", "~> 0.22"
 gem "faraday", "~> 2.9"
-gem "ruby-openai", "~> 7.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
