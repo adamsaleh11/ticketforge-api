@@ -54,4 +54,19 @@ RSpec.describe Project, type: :model do
     expect(Project.llm_providers.keys).to contain_exactly("groq", "ollama")
     expect(Project.statuses.keys).to contain_exactly("draft", "generating", "ready", "failed")
   end
+
+  it "exposes tickets through phases" do
+    project = create(:project)
+    phase = create(:phase, project: project)
+    ticket = create(:ticket, phase: phase)
+
+    expect(project.tickets).to eq([ticket])
+  end
+
+  it "destroys its phases (and their tickets) when destroyed" do
+    project = create(:project)
+    create(:ticket, phase: create(:phase, project: project))
+
+    expect { project.destroy }.to change(Phase, :count).by(-1).and change(Ticket, :count).by(-1)
+  end
 end

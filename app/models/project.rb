@@ -1,5 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :user
+  has_many :phases, -> { order(:position) }, dependent: :destroy
+  has_many :tickets, through: :phases
 
   # String-backed so DB rows stay human-readable. Inclusion is enforced here,
   # not via DB CHECK constraints.

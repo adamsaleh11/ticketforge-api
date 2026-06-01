@@ -21,6 +21,26 @@ module Api
         end
       end
 
+      # DELETE /api/v1/me
+      #
+      # Destroys the User and everything it owns (projects -> phases -> tickets)
+      # via ActiveRecord `dependent: :destroy`. `destroy!` runs the dependent
+      # callbacks (the DB foreign keys have no ON DELETE CASCADE) and wraps the
+      # whole cascade in a transaction, so a mid-cascade failure rolls back
+      # rather than leaving a half-deleted account.
+      #
+      # CAVEAT: this does NOT delete the Supabase auth user — that needs the
+      # Supabase admin API (service-role key) and is out of scope for MVP.
+      # Because the user's Supabase JWT stays valid, the next authenticated
+      # request will recreate an empty User row (see
+      # Authenticatable#resolve_current_user). The frontend must sign the user
+      # out immediately after a 2xx; full cleanup of the orphan Supabase auth
+      # user is the frontend's job via supabase.auth.admin.deleteUser.
+      def destroy
+        current_user.destroy!
+        head :no_content
+      end
+
       private
 
       def user_params

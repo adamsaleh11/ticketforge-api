@@ -20,6 +20,22 @@ RSpec.describe "Api::V1::Projects", type: :request do
       expect(ids).to eq([newer.id.to_s, older.id.to_s])
     end
 
+    it "does not issue per-project ticket or phase queries (no N+1)" do
+      3.times { |i| create(:project, user: current_user, name: "P#{i}", ticket_count: 5) }
+      current_user # resolve before measuring
+
+      queries = []
+      subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        sql = payload[:sql]
+        queries << sql if sql.match?(/FROM "tickets"|FROM "phases"/)
+      end
+      get "/api/v1/projects", headers: auth_headers(valid_supabase_jwt)
+      ActiveSupport::Notifications.unsubscribe(subscriber)
+
+      expect(response).to have_http_status(:ok)
+      expect(queries).to be_empty
+    end
+
     it "excludes other users' projects" do
       create(:project, user: current_user, name: "Mine")
       create(:project, user: create(:user), name: "Theirs")
@@ -53,6 +69,57 @@ RSpec.describe "Api::V1::Projects", type: :request do
         "ticket_count" => 0,
         "last_generated_at" => nil
       )
+    end
+
+    it "embeds the project's phases and tickets, each correctly ordered" do
+      project = create(:project, user: current_user)
+      phase2 = create(:phase, project: project, number: 2, position: 1, title: "Second")
+      phase1 = create(:phase, project: project, number: 1, position: 0, title: "First")
+      t_b = create(:ticket, phase: phase1, position: 1, title: "B")
+      t_a = create(:ticket, phase: phase1, position: 0, title: "A")
+
+      get "/api/v1/projects/#{project.id}", headers: auth_headers(valid_supabase_jwt)
+
+      expect(response).to have_http_status(:ok)
+      included = response.parsed_body["included"]
+
+      phases = included.select { |r| r["type"] == "phase" }
+      expect(phases.map { |r| r.dig("attributes", "title") }).to eq(%w[First Second])
+
+      tickets = included.select { |r| r["type"] == "ticket" }
+      first_phase_tickets = tickets.select { |r| r["id"].in?([t_a.id.to_s, t_b.id.to_s]) }
+      expect(first_phase_tickets.map { |r| r.dig("attributes", "title") }).to eq(%w[A B])
+    end
+
+    it "returns 200 with an empty board for a project that has no phases" do
+      project = create(:project, user: current_user)
+
+      get "/api/v1/projects/#{project.id}", headers: auth_headers(valid_supabase_jwt)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body["data"].dig("relationships", "phases", "data")).to eq([])
+      expect(response.parsed_body["included"]).to eq([])
+    end
+
+    it "does not issue per-phase or per-ticket queries beyond a bounded set (no N+1)" do
+      project = create(:project, user: current_user)
+      2.times do |p|
+        phase = create(:phase, project: project, number: p + 1, position: p)
+        3.times { |t| create(:ticket, phase: phase, position: t) }
+      end
+      current_user # resolve before measuring
+
+      queries = []
+      subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        sql = payload[:sql]
+        queries << sql if sql.match?(/FROM "tickets"|FROM "phases"/)
+      end
+      get "/api/v1/projects/#{project.id}", headers: auth_headers(valid_supabase_jwt)
+      ActiveSupport::Notifications.unsubscribe(subscriber)
+
+      expect(response).to have_http_status(:ok)
+      # One query for phases, one for tickets — not one per phase.
+      expect(queries.size).to be <= 2
     end
 
     it "returns 404 for another user's project" do

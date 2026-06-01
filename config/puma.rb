@@ -11,6 +11,13 @@ max_threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
 min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
 threads min_threads_count, max_threads_count
 
+# Request budget for the synchronous ticket-generation path (no background
+# workers on the Render free tier). The outbound LLM call is capped at
+# TicketGenerator::LLM_TIMEOUT (110s); this leaves headroom under a ~120s
+# request budget. Hard per-request enforcement is a deploy-time concern
+# (e.g. rack-timeout service_timeout: 120, or the platform proxy timeout) —
+# the in-app 110s socket cap is the effective guard within a single worker.
+
 rails_env = ENV.fetch("RAILS_ENV") { "development" }
 
 if rails_env == "production"

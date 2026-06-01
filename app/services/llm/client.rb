@@ -35,11 +35,11 @@ module LLM
     # Returns a provider-specific client. `provider` may be a String or Symbol.
     # An unknown provider raises ArgumentError (a caller bug), deliberately
     # outside the LLM::Error tree.
-    def self.for(provider:, model:, endpoint: nil)
+    def self.for(provider:, model:, endpoint: nil, timeout: nil)
       klass_name = PROVIDERS[provider.to_sym]
       raise ArgumentError, "unknown LLM provider: #{provider.inspect}" unless klass_name
 
-      klass_name.constantize.new(model: model, endpoint: endpoint)
+      klass_name.constantize.new(model: model, endpoint: endpoint, timeout: timeout)
     end
 
     # Sends a system + user prompt and returns the model's reply. In text mode
@@ -78,7 +78,7 @@ module LLM
         request_url,
         body: body.to_json,
         headers: request_headers,
-        timeout: TIMEOUT
+        timeout: request_timeout
       )
 
       unless response.success?
@@ -87,6 +87,13 @@ module LLM
       end
 
       response
+    end
+
+    # The per-request socket timeout. Subclasses set @timeout (via the factory)
+    # to override the shared default — e.g. the long-running ticket-generation
+    # path raises it above TIMEOUT so a valid-but-slow response is not killed.
+    def request_timeout
+      @timeout || TIMEOUT
     end
 
     # Subclass hook for fail-fast preconditions (e.g. a required API key)

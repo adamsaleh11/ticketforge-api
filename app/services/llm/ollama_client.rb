@@ -9,9 +9,10 @@ module LLM
 
     # model is optional: it is unused by the connectivity check (#list_models)
     # and only required by the chat path.
-    def initialize(model: nil, endpoint: nil)
+    def initialize(model: nil, endpoint: nil, timeout: nil)
       @model = model
       @endpoint = endpoint.presence || DEFAULT_ENDPOINT
+      @timeout = timeout
     end
 
     # Lists the models installed on the Ollama server via its native /api/tags

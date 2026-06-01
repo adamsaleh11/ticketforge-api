@@ -9,7 +9,10 @@ module Api
 
       # GET /api/v1/projects/:id
       def show
-        render json: ProjectSerializer.new(find_project).serializable_hash
+        project = current_user.projects.includes(phases: :tickets).find(params[:id])
+        render json: ProjectSerializer.new(
+          project, include: %i[phases phases.tickets]
+        ).serializable_hash
       end
 
       # POST /api/v1/projects
@@ -38,7 +41,29 @@ module Api
         head :no_content
       end
 
+      # POST /api/v1/projects/:id/generate
+      def generate
+        project = find_project
+        result = TicketGenerator.new(project).call
+
+        if result.success?
+          render json: ProjectSerializer.new(
+            project,
+            include: %i[phases phases.tickets],
+            meta: { repo_context_used: result.repo_context_used }
+          ).serializable_hash
+        else
+          render json: { error: result.error_kind }, status: generate_error_status(result.error_kind)
+        end
+      end
+
       private
+
+      # Re-entry is a client conflict (409); every other failure is an upstream
+      # LLM problem surfaced as a gateway error (502).
+      def generate_error_status(error_kind)
+        error_kind == :already_generating ? :conflict : :bad_gateway
+      end
 
       # Always scope through the association so another user's (or a missing)
       # project raises RecordNotFound -> 404, never leaking existence.

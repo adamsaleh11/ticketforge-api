@@ -3,8 +3,9 @@ module LLM
   class GroqClient < Client
     URL = "https://api.groq.com/openai/v1/chat/completions".freeze
 
-    def initialize(model:, endpoint: nil)
+    def initialize(model:, endpoint: nil, timeout: nil)
       @model = model
+      @timeout = timeout
     end
 
     private

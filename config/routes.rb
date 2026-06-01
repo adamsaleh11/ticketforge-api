@@ -17,10 +17,19 @@ Rails.application.routes.draw do
       # Current authenticated user's profile. PATCH syncs the GitHub OAuth token
       # the frontend reads from the Supabase session (provider_token), which is
       # never present in the JWT itself.
-      get   "me", to: "users#show"
-      patch "me", to: "users#update"
+      get    "me", to: "users#show"
+      patch  "me", to: "users#update"
+      delete "me", to: "users#destroy"
 
-      resources :projects, only: %i[index show create update destroy]
+      resources :projects, only: %i[index show create update destroy] do
+        member do
+          post :generate
+        end
+      end
+
+      # Per-ticket status updates. Flat path (not nested under projects); the
+      # ticket is scoped to the current user's projects in the controller.
+      resources :tickets, only: %i[update]
 
       # User-level Ollama configuration: save the endpoint, then test connectivity.
       namespace :settings do

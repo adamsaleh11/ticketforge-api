@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_01_120000) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_01_185808) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -25,6 +25,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_01_120000) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "phases", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.integer "number", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id", "position"], name: "index_phases_on_project_id_and_position"
+    t.index ["project_id"], name: "index_phases_on_project_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "name", null: false
@@ -35,7 +47,22 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_01_120000) do
     t.string "status", default: "draft", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "ticket_count", default: 0, null: false
+    t.datetime "last_generated_at"
     t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.bigint "phase_id", null: false
+    t.string "repo", null: false
+    t.string "title", null: false
+    t.text "body", null: false
+    t.integer "position", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phase_id", "position"], name: "index_tickets_on_phase_id_and_position"
+    t.index ["phase_id"], name: "index_tickets_on_phase_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -50,5 +77,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_01_120000) do
     t.index ["supabase_user_id"], name: "index_users_on_supabase_user_id", unique: true
   end
 
+  add_foreign_key "phases", "projects"
   add_foreign_key "projects", "users"
+  add_foreign_key "tickets", "phases"
 end

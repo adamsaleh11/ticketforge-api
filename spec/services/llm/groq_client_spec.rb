@@ -24,6 +24,27 @@ RSpec.describe LLM::GroqClient do
     { "choices" => [{ "message" => { "role" => "assistant", "content" => content } }] }
   end
 
+  describe "request timeout" do
+    it "defaults to the shared 60s timeout" do
+      stub_groq(body: chat_response("ok"))
+      allow(HTTParty).to receive(:post).and_call_original
+
+      client.chat(system: "s", user: "u")
+
+      expect(HTTParty).to have_received(:post).with(anything, hash_including(timeout: 60))
+    end
+
+    it "applies a custom timeout supplied via the factory" do
+      stub_groq(body: chat_response("ok"))
+      allow(HTTParty).to receive(:post).and_call_original
+
+      LLM::Client.for(provider: :groq, model: model, timeout: 110)
+        .chat(system: "s", user: "u")
+
+      expect(HTTParty).to have_received(:post).with(anything, hash_including(timeout: 110))
+    end
+  end
+
   describe "#chat (json mode)" do
     it "returns the assistant content parsed as a Hash" do
       stub_groq(body: chat_response('{"phases":["a","b"]}'))

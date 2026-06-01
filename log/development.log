@@ -4720,3 +4720,766 @@ Processing by Api::V1::Github::ReposController#index as HTML
 Completed 200 OK in 1080ms (Views: 0.2ms | ActiveRecord: 268.2ms | Allocations: 7878)
 
 
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+  [1m[35m (30.9ms)[0m  [1m[34mSELECT pg_try_advisory_lock(737815420147457505)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (26.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (26.8ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to CreatePhasesAndTickets (20260601183658)
+  [1m[36mTRANSACTION (26.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (86.1ms)[0m  [1m[35mCREATE TABLE "phases" ("id" bigserial primary key, "project_id" bigint NOT NULL, "number" integer NOT NULL, "title" character varying NOT NULL, "description" text, "position" integer NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_b0efe660f5"
+FOREIGN KEY ("project_id")
+  REFERENCES "projects" ("id")
+)[0m
+  [1m[35m (25.0ms)[0m  [1m[35mCREATE INDEX "index_phases_on_project_id" ON "phases" ("project_id")[0m
+  [1m[35m (25.0ms)[0m  [1m[35mCREATE INDEX "index_phases_on_project_id_and_position" ON "phases" ("project_id", "position")[0m
+  [1m[35m (30.2ms)[0m  [1m[35mCREATE TABLE "tickets" ("id" bigserial primary key, "phase_id" bigint NOT NULL, "repo" character varying NOT NULL, "title" character varying NOT NULL, "body" text NOT NULL, "position" integer NOT NULL, "status" character varying DEFAULT 'pending' NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_e71cc32ecb"
+FOREIGN KEY ("phase_id")
+  REFERENCES "phases" ("id")
+)[0m
+  [1m[35m (24.9ms)[0m  [1m[35mCREATE INDEX "index_tickets_on_phase_id" ON "tickets" ("phase_id")[0m
+  [1m[35m (25.1ms)[0m  [1m[35mCREATE INDEX "index_tickets_on_phase_id_and_position" ON "tickets" ("phase_id", "position")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (32.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260601183658') RETURNING "version"[0m
+  [1m[36mTRANSACTION (48.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (27.8ms)[0m  [1m[34mSELECT pg_advisory_unlock(737815420147457505)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (77.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/api/v1/me" for ::1 at 2026-06-01 14:51:21 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 14:51:21 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (21.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::UsersController#show as HTML
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (26.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 920ms (Views: 0.4ms | ActiveRecord: 396.0ms | Allocations: 26269)
+
+
+  [1m[36mUser Load (28.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (26.8ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 1460ms (Views: 0.2ms | ActiveRecord: 391.7ms | Allocations: 35571)
+
+
+Started GET "/api/v1/github/repos?_=1780339884569" for ::1 at 2026-06-01 14:51:24 -0400
+Processing by Api::V1::Github::ReposController#index as HTML
+  Parameters: {"_"=>"1780339884569"}
+  [1m[36mUser Load (26.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 957ms (Views: 0.2ms | ActiveRecord: 26.4ms | Allocations: 5399)
+
+
+Started POST "/api/v1/projects" for ::1 at 2026-06-01 14:51:31 -0400
+Processing by Api::V1::ProjectsController#create as HTML
+  Parameters: {"project"=>{"name"=>"Habit tracker", "description"=>"A habit tracker web app. Users sign up, create daily habits, check them off each day, and see a streak counter and a simple weekly progress chart.", "llm_provider"=>"groq", "llm_model"=>"llama-3.3-70b-versatile"}}
+  [1m[36mUser Load (27.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mTRANSACTION (26.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:18:in `create'
+  [1m[36mProject Create (58.9ms)[0m  [1m[32mINSERT INTO "projects" ("user_id", "name", "description", "github_repo_full_name", "llm_provider", "llm_model", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["user_id", 3], ["name", "Habit tracker"], ["description", "A habit tracker web app. Users sign up, create daily habits, check them off each day, and see a streak counter and a simple weekly progress chart."], ["github_repo_full_name", nil], ["llm_provider", "groq"], ["llm_model", "llama-3.3-70b-versatile"], ["status", "draft"], ["created_at", "2026-06-01 18:51:32.072933"], ["updated_at", "2026-06-01 18:51:32.072933"]]
+  ↳ app/controllers/api/v1/projects_controller.rb:18:in `create'
+  [1m[36mTRANSACTION (26.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:18:in `create'
+  [1m[36mTicket Count (31.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 1]]
+  ↳ app/serializers/project_serializer.rb:8:in `block in <class:ProjectSerializer>'
+  [1m[36mTicket Maximum (25.4ms)[0m  [1m[34mSELECT MAX("tickets"."updated_at") FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 1]]
+  ↳ app/serializers/project_serializer.rb:12:in `block in <class:ProjectSerializer>'
+  [1m[36mPhase Pluck (25.6ms)[0m  [1m[34mSELECT "phases"."id" FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:19:in `create'
+Completed 201 Created in 416ms (Views: 0.2ms | ActiveRecord: 303.4ms | Allocations: 17404)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 14:51:32 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (27.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (25.2ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+  [1m[36mTicket Count (26.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 1]]
+  ↳ app/serializers/project_serializer.rb:8:in `block in <class:ProjectSerializer>'
+  [1m[36mTicket Maximum (25.2ms)[0m  [1m[34mSELECT MAX("tickets"."updated_at") FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 1]]
+  ↳ app/serializers/project_serializer.rb:12:in `block in <class:ProjectSerializer>'
+  [1m[36mPhase Pluck (24.7ms)[0m  [1m[34mSELECT "phases"."id" FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 169ms (Views: 0.4ms | ActiveRecord: 128.7ms | Allocations: 3619)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 14:55:19 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 14:55:19 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (27.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 63ms (Views: 0.3ms | ActiveRecord: 27.0ms | Allocations: 892)
+
+
+  [1m[36mUser Load (28.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (27.0ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+  [1m[36mTicket Count (25.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 1]]
+  ↳ app/serializers/project_serializer.rb:8:in `block in <class:ProjectSerializer>'
+  [1m[36mTicket Maximum (27.5ms)[0m  [1m[34mSELECT MAX("tickets"."updated_at") FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 1]]
+  ↳ app/serializers/project_serializer.rb:12:in `block in <class:ProjectSerializer>'
+  [1m[36mPhase Pluck (25.7ms)[0m  [1m[34mSELECT "phases"."id" FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 179ms (Views: 0.2ms | ActiveRecord: 133.5ms | Allocations: 4950)
+
+
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+  [1m[35m (24.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(737815420147457505)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (23.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (22.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to AddTicketCacheToProjects (20260601185808)
+  [1m[36mTRANSACTION (25.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (40.9ms)[0m  [1m[35mALTER TABLE "projects" ADD "ticket_count" integer DEFAULT 0 NOT NULL[0m
+  [1m[35m (23.3ms)[0m  [1m[35mALTER TABLE "projects" ADD "last_generated_at" timestamp(6)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (24.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20260601185808') RETURNING "version"[0m
+  [1m[36mTRANSACTION (24.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (23.7ms)[0m  [1m[34mSELECT pg_advisory_unlock(737815420147457505)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (25.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 14:59:34 -0400
+Started GET "/api/v1/me" for ::1 at 2026-06-01 14:59:34 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (22.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::UsersController#show as HTML
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (22.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 872ms (Views: 0.4ms | ActiveRecord: 354.6ms | Allocations: 26245)
+
+
+  [1m[36mUser Load (23.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (26.0ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 1344ms (Views: 0.3ms | ActiveRecord: 338.3ms | Allocations: 42057)
+
+
+Started DELETE "/api/v1/projects/1" for ::1 at 2026-06-01 14:59:39 -0400
+Processing by Api::V1::ProjectsController#destroy as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (26.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (25.4ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:68:in `find_project'
+  [1m[36mTRANSACTION (22.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+  [1m[36mPhase Load (26.7ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+  [1m[36mProject Destroy (26.1ms)[0m  [1m[31mDELETE FROM "projects" WHERE "projects"."id" = $1[0m  [["id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+  [1m[36mTRANSACTION (24.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+Completed 204 No Content in 287ms (ActiveRecord: 223.2ms | Allocations: 5780)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 14:59:39 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (24.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (23.7ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 75ms (Views: 0.2ms | ActiveRecord: 48.2ms | Allocations: 1474)
+
+
+Started GET "/api/v1/github/repos?_=1780340381039" for ::1 at 2026-06-01 14:59:41 -0400
+Processing by Api::V1::Github::ReposController#index as HTML
+  Parameters: {"_"=>"1780340381039"}
+  [1m[36mUser Load (23.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 628ms (Views: 0.3ms | ActiveRecord: 23.2ms | Allocations: 5385)
+
+
+Started POST "/api/v1/projects" for ::1 at 2026-06-01 14:59:59 -0400
+Processing by Api::V1::ProjectsController#create as HTML
+  Parameters: {"project"=>{"name"=>"Habit tracker", "description"=>"A habit tracker web app. Users sign up, create daily habits, check them off each day, and see a streak counter and a simple weekly progress chart.", "llm_provider"=>"groq", "llm_model"=>"llama-3.3-70b-versatile"}}
+  [1m[36mUser Load (26.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mTRANSACTION (22.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:18:in `create'
+  [1m[36mProject Create (50.5ms)[0m  [1m[32mINSERT INTO "projects" ("user_id", "name", "description", "github_repo_full_name", "llm_provider", "llm_model", "status", "created_at", "updated_at", "ticket_count", "last_generated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["user_id", 3], ["name", "Habit tracker"], ["description", "A habit tracker web app. Users sign up, create daily habits, check them off each day, and see a streak counter and a simple weekly progress chart."], ["github_repo_full_name", nil], ["llm_provider", "groq"], ["llm_model", "llama-3.3-70b-versatile"], ["status", "draft"], ["created_at", "2026-06-01 18:59:59.795499"], ["updated_at", "2026-06-01 18:59:59.795499"], ["ticket_count", 0], ["last_generated_at", nil]]
+  ↳ app/controllers/api/v1/projects_controller.rb:18:in `create'
+  [1m[36mTRANSACTION (24.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:18:in `create'
+Completed 201 Created in 143ms (Views: 0.5ms | ActiveRecord: 122.9ms | Allocations: 3551)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 14:59:59 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (23.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (23.2ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 75ms (Views: 0.4ms | ActiveRecord: 47.0ms | Allocations: 1534)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:02:20 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:02:20 -0400
+Processing by Api::V1::UsersController#show as HTML
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (24.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  [1m[36mUser Load (25.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 58ms (Views: 0.4ms | ActiveRecord: 24.9ms | Allocations: 1816)
+
+
+  [1m[36mProject Load (25.0ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 106ms (Views: 0.2ms | ActiveRecord: 50.1ms | Allocations: 2348)
+
+
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+  [1m[36mProject Count (29.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "projects"[0m
+  [1m[36mPhase Count (26.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "phases"[0m
+  [1m[36mTicket Count (25.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets"[0m
+  [1m[36mProject Load (32.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" ORDER BY "projects"."updated_at" DESC LIMIT $1[0m  [["LIMIT", 5]]
+  [1m[36mPhase Count (26.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "phases" WHERE "phases"."project_id" = $1[0m  [["project_id", 2]]
+Started DELETE "/api/v1/projects/2" for ::1 at 2026-06-01 15:02:26 -0400
+Processing by Api::V1::ProjectsController#destroy as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (24.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (24.4ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:68:in `find_project'
+  [1m[36mTRANSACTION (23.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+  [1m[36mPhase Load (23.9ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 2]]
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+  [1m[36mProject Destroy (26.8ms)[0m  [1m[31mDELETE FROM "projects" WHERE "projects"."id" = $1[0m  [["id", 2]]
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+  [1m[36mTRANSACTION (24.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:37:in `destroy'
+Completed 204 No Content in 227ms (ActiveRecord: 147.3ms | Allocations: 3629)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:02:26 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (23.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (28.7ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 79ms (Views: 0.2ms | ActiveRecord: 51.6ms | Allocations: 1443)
+
+
+Started GET "/api/v1/github/repos?_=1780340553561" for ::1 at 2026-06-01 15:02:33 -0400
+Processing by Api::V1::Github::ReposController#index as HTML
+  Parameters: {"_"=>"1780340553561"}
+  [1m[36mUser Load (24.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 438ms (Views: 0.6ms | ActiveRecord: 24.0ms | Allocations: 4064)
+
+
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+  [1m[36mProject Load (25.0ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+  [1m[36mProject Load (25.2ms)[0m  [1m[34mSELECT "projects".* FROM "projects" ORDER BY "projects"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+  [1m[36mUser Load (27.7ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (25.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProject Create (53.5ms)[0m  [1m[32mINSERT INTO "projects" ("user_id", "name", "description", "github_repo_full_name", "llm_provider", "llm_model", "status", "created_at", "updated_at", "ticket_count", "last_generated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["user_id", 3], ["name", "Habit Tracker"], ["description", "A habit tracker web app. Users sign up, create daily habits, check them off each day, and see a streak counter and a weekly progress chart."], ["github_repo_full_name", nil], ["llm_provider", "groq"], ["llm_model", "llama-3.3-70b-versatile"], ["status", "draft"], ["created_at", "2026-06-01 19:03:19.123619"], ["updated_at", "2026-06-01 19:03:19.123619"], ["ticket_count", 0], ["last_generated_at", nil]]
+  [1m[36mTRANSACTION (26.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (27.0ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/ticket_generator.rb:35:in `call'
+  [1m[36mProject Update (53.9ms)[0m  [1m[33mUPDATE "projects" SET "status" = $1, "updated_at" = $2 WHERE "projects"."id" = $3[0m  [["status", "generating"], ["updated_at", "2026-06-01 19:03:19.209336"], ["id", 3]]
+  ↳ app/services/ticket_generator.rb:35:in `call'
+  [1m[36mTRANSACTION (28.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/ticket_generator.rb:35:in `call'
+  [1m[36mTRANSACTION (25.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/ticket_generator.rb:102:in `block in persist!'
+  [1m[36mPhase Load (26.7ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 3]]
+  ↳ app/services/ticket_generator.rb:102:in `block in persist!'
+  [1m[36mPhase Create (27.1ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 3], ["number", 1], ["title", "User Authentication"], ["description", "Implement user sign-up and login functionality"], ["position", 0], ["created_at", "2026-06-01 19:03:22.852437"], ["updated_at", "2026-06-01 19:03:22.852437"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (26.0ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 1], ["repo", "backend"], ["title", "Create user authentication API"], ["body", "Create a Supabase authentication API to handle user sign-up and login. Use the Supabase JavaScript library to interact with the database. The API should have two endpoints: '/api/auth/signup' and '/api/auth/login'. The '/api/auth/signup' endpoint should accept a username, email, and password, and create a new user in the database. The '/api/auth/login' endpoint should accept an email and password, and return a JSON Web Token (JWT) if the credentials are valid. Use the 'supabase-client' library to generate the JWT."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:03:22.945889"], ["updated_at", "2026-06-01 19:03:22.945889"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (25.7ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 1], ["repo", "frontend"], ["title", "Implement login and sign-up forms"], ["body", "Create login and sign-up forms in the Next.js app using the 'shadcn/ui' library. The forms should send requests to the '/api/auth/signup' and '/api/auth/login' endpoints. Use the 'axios' library to make HTTP requests. The forms should also handle errors and display validation messages to the user. Use Tailwind CSS to style the forms."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:03:22.974487"], ["updated_at", "2026-06-01 19:03:22.974487"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (26.0ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 1], ["repo", "frontend"], ["title", "Implement authentication state management"], ["body", "Use the 'react-context' library to create an authentication context that stores the user's authentication state. The context should have a 'login' and 'logout' function that updates the authentication state. The context should also have a 'getUser' function that returns the currently logged-in user. Use the 'useContext' hook to access the authentication context in other components."], ["position", 2], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.003152"], ["updated_at", "2026-06-01 19:03:23.003152"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (25.0ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 3], ["number", 2], ["title", "Habit Creation"], ["description", "Implement habit creation functionality"], ["position", 1], ["created_at", "2026-06-01 19:03:23.032452"], ["updated_at", "2026-06-01 19:03:23.032452"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (25.1ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 2], ["repo", "backend"], ["title", "Create habit API"], ["body", "Create a Supabase API to handle habit creation. The API should have one endpoint: '/api/habits'. The endpoint should accept a habit name and description, and create a new habit in the database. Use the 'supabase-client' library to interact with the database."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.061985"], ["updated_at", "2026-06-01 19:03:23.061985"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (25.7ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 2], ["repo", "frontend"], ["title", "Implement habit creation form"], ["body", "Create a habit creation form in the Next.js app using the 'shadcn/ui' library. The form should send a request to the '/api/habits' endpoint. Use the 'axios' library to make HTTP requests. The form should also handle errors and display validation messages to the user. Use Tailwind CSS to style the form."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.089327"], ["updated_at", "2026-06-01 19:03:23.089327"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (26.1ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 2], ["repo", "frontend"], ["title", "Implement habit list component"], ["body", "Create a habit list component that displays all the user's habits. The component should fetch the habits from the '/api/habits' endpoint. Use the 'axios' library to make HTTP requests. The component should also handle errors and display a loading indicator while the data is being fetched. Use the 'shadcn/ui' library to style the component."], ["position", 2], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.117739"], ["updated_at", "2026-06-01 19:03:23.117739"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (28.2ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 3], ["number", 3], ["title", "Habit Checking"], ["description", "Implement habit checking functionality"], ["position", 2], ["created_at", "2026-06-01 19:03:23.147773"], ["updated_at", "2026-06-01 19:03:23.147773"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (24.9ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 3], ["repo", "backend"], ["title", "Create habit check API"], ["body", "Create a Supabase API to handle habit checking. The API should have one endpoint: '/api/habits/:id/check'. The endpoint should accept a habit ID and a check date, and update the habit's check history in the database. Use the 'supabase-client' library to interact with the database."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.179865"], ["updated_at", "2026-06-01 19:03:23.179865"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (24.5ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 3], ["repo", "frontend"], ["title", "Implement habit checking button"], ["body", "Create a habit checking button in the habit list component. The button should send a request to the '/api/habits/:id/check' endpoint when clicked. Use the 'axios' library to make HTTP requests. The button should also handle errors and display a loading indicator while the request is being processed. Use the 'shadcn/ui' library to style the button."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.207572"], ["updated_at", "2026-06-01 19:03:23.207572"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (25.4ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 3], ["repo", "frontend"], ["title", "Implement habit streak counter"], ["body", "Create a habit streak counter component that displays the user's current streak for each habit. The component should fetch the habit's check history from the '/api/habits/:id' endpoint. Use the 'axios' library to make HTTP requests. The component should also handle errors and display a loading indicator while the data is being fetched. Use the 'shadcn/ui' library to style the component."], ["position", 2], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.234611"], ["updated_at", "2026-06-01 19:03:23.234611"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (26.4ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 3], ["number", 4], ["title", "Weekly Progress Chart"], ["description", "Implement weekly progress chart functionality"], ["position", 3], ["created_at", "2026-06-01 19:03:23.262638"], ["updated_at", "2026-06-01 19:03:23.262638"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (25.4ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 4], ["repo", "backend"], ["title", "Create habit progress API"], ["body", "Create a Supabase API to handle habit progress. The API should have one endpoint: '/api/habits/:id/progress'. The endpoint should accept a habit ID and return the habit's progress data for the last week. Use the 'supabase-client' library to interact with the database."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.291686"], ["updated_at", "2026-06-01 19:03:23.291686"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (26.8ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 4], ["repo", "frontend"], ["title", "Implement weekly progress chart component"], ["body", "Create a weekly progress chart component that displays the user's progress for each habit over the last week. The component should fetch the progress data from the '/api/habits/:id/progress' endpoint. Use the 'axios' library to make HTTP requests. The component should also handle errors and display a loading indicator while the data is being fetched. Use a charting library such as 'react-chartjs-2' to render the chart."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.319481"], ["updated_at", "2026-06-01 19:03:23.319481"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (25.9ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 3], ["number", 5], ["title", "Error Handling and Testing"], ["description", "Implement error handling and testing for the app"], ["position", 4], ["created_at", "2026-06-01 19:03:23.348760"], ["updated_at", "2026-06-01 19:03:23.348760"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (28.2ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 5], ["repo", "frontend"], ["title", "Implement error handling"], ["body", "Implement error handling for the app using the 'react-error-boundary' library. The library should catch any errors that occur in the app and display a friendly error message to the user. Use the 'useErrorBoundary' hook to wrap the app in an error boundary."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.378040"], ["updated_at", "2026-06-01 19:03:23.378040"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (26.0ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 5], ["repo", "fullstack"], ["title", "Write unit tests and integration tests"], ["body", "Write unit tests and integration tests for the app using a testing library such as 'jest' and 'react-testing-library'. The tests should cover all the functionality of the app, including user authentication, habit creation, habit checking, and progress chart rendering. Use the 'supabase-client' library to mock out the Supabase API for testing purposes."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:03:23.409100"], ["updated_at", "2026-06-01 19:03:23.409100"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTRANSACTION (25.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/ticket_generator.rb:101:in `persist!'
+  [1m[36mTicket Count (30.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 3]]
+  ↳ app/services/ticket_generator.rb:41:in `call'
+  [1m[36mTRANSACTION (30.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/ticket_generator.rb:39:in `call'
+  [1m[36mProject Update (58.3ms)[0m  [1m[33mUPDATE "projects" SET "status" = $1, "updated_at" = $2, "ticket_count" = $3, "last_generated_at" = $4 WHERE "projects"."id" = $5[0m  [["status", "ready"], ["updated_at", "2026-06-01 19:03:23.506669"], ["ticket_count", 13], ["last_generated_at", "2026-06-01 19:03:23.505719"], ["id", 3]]
+  ↳ app/services/ticket_generator.rb:39:in `call'
+  [1m[36mTRANSACTION (25.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/ticket_generator.rb:39:in `call'
+  [1m[36mProject Load (26.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mPhase Count (25.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "phases" WHERE "phases"."project_id" = $1[0m  [["project_id", 3]]
+  [1m[36mTicket Count (28.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 3]]
+  [1m[36mPhase Load (28.7ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 3]]
+  [1m[36mTicket Count (25.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" WHERE "tickets"."phase_id" = $1[0m  [["phase_id", 1]]
+  [1m[36mTicket Count (25.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" WHERE "tickets"."phase_id" = $1[0m  [["phase_id", 2]]
+  [1m[36mTicket Count (25.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" WHERE "tickets"."phase_id" = $1[0m  [["phase_id", 3]]
+  [1m[36mTicket Count (26.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" WHERE "tickets"."phase_id" = $1[0m  [["phase_id", 4]]
+  [1m[36mTicket Count (25.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" WHERE "tickets"."phase_id" = $1[0m  [["phase_id", 5]]
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/api/v1/github/repos?_=1780341681946" for ::1 at 2026-06-01 15:21:22 -0400
+Processing by Api::V1::Github::ReposController#index as HTML
+  Parameters: {"_"=>"1780341681946"}
+  [1m[36mUser Load (28.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 1429ms (Views: 1.4ms | ActiveRecord: 271.4ms | Allocations: 13984)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:21:24 -0400
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:21:24 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (24.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (26.2ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 134ms (Views: 0.1ms | ActiveRecord: 50.9ms | Allocations: 11809)
+
+
+  [1m[36mUser Load (27.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 489ms (Views: 0.3ms | ActiveRecord: 244.9ms | Allocations: 13804)
+
+
+Started DELETE "/api/v1/projects/3" for ::1 at 2026-06-01 15:21:32 -0400
+Processing by Api::V1::ProjectsController#destroy as HTML
+  Parameters: {"id"=>"3"}
+  [1m[36mUser Load (24.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (26.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:71:in `find_project'
+  [1m[36mTRANSACTION (25.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mPhase Load (26.4ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Load (23.8ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (26.7ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (24.3ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 2]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (22.5ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mPhase Destroy (25.1ms)[0m  [1m[31mDELETE FROM "phases" WHERE "phases"."id" = $1[0m  [["id", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Load (24.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 2]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (23.2ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 4]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (22.7ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 5]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (22.6ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 6]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mPhase Destroy (23.9ms)[0m  [1m[31mDELETE FROM "phases" WHERE "phases"."id" = $1[0m  [["id", 2]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Load (22.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (23.3ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 7]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (23.6ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 8]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (25.1ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 9]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mPhase Destroy (24.0ms)[0m  [1m[31mDELETE FROM "phases" WHERE "phases"."id" = $1[0m  [["id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Load (27.8ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 4]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (23.3ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 10]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (22.2ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 11]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mPhase Destroy (22.5ms)[0m  [1m[31mDELETE FROM "phases" WHERE "phases"."id" = $1[0m  [["id", 4]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Load (22.5ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 5]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (22.6ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 12]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTicket Destroy (25.3ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = $1[0m  [["id", 13]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mPhase Destroy (21.8ms)[0m  [1m[31mDELETE FROM "phases" WHERE "phases"."id" = $1[0m  [["id", 5]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mProject Destroy (23.0ms)[0m  [1m[31mDELETE FROM "projects" WHERE "projects"."id" = $1[0m  [["id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+  [1m[36mTRANSACTION (24.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:40:in `destroy'
+Completed 204 No Content in 981ms (ActiveRecord: 779.4ms | Allocations: 36199)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:21:33 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (24.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (23.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 109ms (Views: 0.1ms | ActiveRecord: 48.0ms | Allocations: 1449)
+
+
+Started GET "/api/v1/github/repos?_=1780341694226" for ::1 at 2026-06-01 15:21:34 -0400
+Processing by Api::V1::Github::ReposController#index as HTML
+  Parameters: {"_"=>"1780341694226"}
+  [1m[36mUser Load (25.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 417ms (Views: 0.4ms | ActiveRecord: 25.0ms | Allocations: 4181)
+
+
+Started GET "/projects/test-project" for ::1 at 2026-06-01 15:28:07 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/projects/test-project"):
+  
+Started HEAD "/projects/test-project" for ::1 at 2026-06-01 15:28:22 -0400
+  
+ActionController::RoutingError (No route matches [HEAD] "/projects/test-project"):
+  
+Started HEAD "/projects/test-project" for 127.0.0.1 at 2026-06-01 15:28:26 -0400
+  
+ActionController::RoutingError (No route matches [HEAD] "/projects/test-project"):
+  
+Started HEAD "/projects/test-project" for ::1 at 2026-06-01 15:28:26 -0400
+  
+ActionController::RoutingError (No route matches [HEAD] "/projects/test-project"):
+  
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:31:05 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:31:05 -0400
+Processing by Api::V1::UsersController#show as HTML
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (24.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mUser Load (26.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 654ms (Views: 1.1ms | ActiveRecord: 268.9ms | Allocations: 9743)
+
+
+  [1m[36mProject Load (21.4ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 648ms (Views: 0.1ms | ActiveRecord: 262.6ms | Allocations: 8903)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:31:55 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:31:55 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (27.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mUser Load (28.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 69ms (Views: 0.5ms | ActiveRecord: 28.6ms | Allocations: 1579)
+
+
+  [1m[36mProject Load (24.3ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 98ms (Views: 0.1ms | ActiveRecord: 51.8ms | Allocations: 2797)
+
+
+Started GET "/api/v1/github/repos?_=1780342317077" for ::1 at 2026-06-01 15:31:57 -0400
+Processing by Api::V1::Github::ReposController#index as HTML
+  Parameters: {"_"=>"1780342317077"}
+  [1m[36mUser Load (24.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 480ms (Views: 0.4ms | ActiveRecord: 23.9ms | Allocations: 4167)
+
+
+Started POST "/api/v1/projects" for ::1 at 2026-06-01 15:33:22 -0400
+Processing by Api::V1::ProjectsController#create as HTML
+  Parameters: {"project"=>{"name"=>"Habit tracker", "description"=>"A habit tracker web app. Users sign up, create daily habits, check them off each day, and see a streak counter and a simple weekly progress chart.", "llm_provider"=>"groq", "llm_model"=>"llama-3.3-70b-versatile"}}
+  [1m[36mUser Load (23.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mTRANSACTION (24.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:21:in `create'
+  [1m[36mProject Create (59.9ms)[0m  [1m[32mINSERT INTO "projects" ("user_id", "name", "description", "github_repo_full_name", "llm_provider", "llm_model", "status", "created_at", "updated_at", "ticket_count", "last_generated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["user_id", 3], ["name", "Habit tracker"], ["description", "A habit tracker web app. Users sign up, create daily habits, check them off each day, and see a streak counter and a simple weekly progress chart."], ["github_repo_full_name", nil], ["llm_provider", "groq"], ["llm_model", "llama-3.3-70b-versatile"], ["status", "draft"], ["created_at", "2026-06-01 19:33:22.223140"], ["updated_at", "2026-06-01 19:33:22.223140"], ["ticket_count", 0], ["last_generated_at", nil]]
+  ↳ app/controllers/api/v1/projects_controller.rb:21:in `create'
+  [1m[36mTRANSACTION (24.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/projects_controller.rb:21:in `create'
+Completed 201 Created in 142ms (Views: 0.3ms | ActiveRecord: 131.9ms | Allocations: 3056)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:33:22 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (22.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (22.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 71ms (Views: 0.2ms | ActiveRecord: 44.6ms | Allocations: 1534)
+
+
+Started GET "/api/v1/projects/4" for ::1 at 2026-06-01 15:33:23 -0400
+Processing by Api::V1::ProjectsController#show as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mUser Load (23.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (23.8ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+  [1m[36mPhase Load (25.2ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 4]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+Completed 200 OK in 158ms (Views: 1.0ms | ActiveRecord: 71.9ms | Allocations: 4635)
+
+
+Started POST "/api/v1/projects/4/generate" for ::1 at 2026-06-01 15:33:27 -0400
+Processing by Api::V1::ProjectsController#generate as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mUser Load (22.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (25.0ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:71:in `find_project'
+  [1m[36mTRANSACTION (22.0ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/ticket_generator.rb:35:in `call'
+  [1m[36mProject Update (46.1ms)[0m  [1m[33mUPDATE "projects" SET "status" = $1, "updated_at" = $2 WHERE "projects"."id" = $3[0m  [["status", "generating"], ["updated_at", "2026-06-01 19:33:27.317259"], ["id", 4]]
+  ↳ app/services/ticket_generator.rb:35:in `call'
+  [1m[36mTRANSACTION (24.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/ticket_generator.rb:35:in `call'
+  [1m[36mTRANSACTION (22.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/ticket_generator.rb:102:in `block in persist!'
+  [1m[36mPhase Load (24.7ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 4]]
+  ↳ app/services/ticket_generator.rb:102:in `block in persist!'
+  [1m[36mPhase Create (22.6ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 4], ["number", 1], ["title", "Initialization"], ["description", "Setting up the project foundation"], ["position", 0], ["created_at", "2026-06-01 19:33:30.564682"], ["updated_at", "2026-06-01 19:33:30.564682"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (25.9ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 6], ["repo", "frontend"], ["title", "Create Next.js 14 project"], ["body", "Create a new Next.js 14 project using App Router and TypeScript, with shadcn/ui and Tailwind, in the 'frontend' repository. The project should have a 'pages' directory with an index page. Use 'npm create next-app@latest --use-app-dir' and then install required packages 'npm install @shadcn/ui tailwindcss'. Create a new git repository and initialize it."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.592489"], ["updated_at", "2026-06-01 19:33:30.592489"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (23.2ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 6], ["repo", "backend"], ["title", "Create Node.js project"], ["body", "Create a new Node.js project using Supabase, in the 'backend' repository. Create a new git repository and initialize it. Install required packages 'npm install @supabase/supabase-js'. Create a Supabase instance."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.621730"], ["updated_at", "2026-06-01 19:33:30.621730"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (23.3ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 6], ["repo", "devops"], ["title", "Create a git repository for both frontend and backend"], ["body", "Create two separate git repositories for the 'frontend' and 'backend' projects and initialize them with a .gitignore file for Node.js projects."], ["position", 2], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.649803"], ["updated_at", "2026-06-01 19:33:30.649803"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (23.2ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 4], ["number", 2], ["title", "Database Setup"], ["description", "Setting up the Supabase database"], ["position", 1], ["created_at", "2026-06-01 19:33:30.676422"], ["updated_at", "2026-06-01 19:33:30.676422"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (23.6ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 7], ["repo", "backend"], ["title", "Create Supabase tables"], ["body", "Create three tables in Supabase: users, habits, and habit_checks. The 'users' table should have columns for id, email, and password. The 'habits' table should have columns for id, user_id, name, and description. The 'habit_checks' table should have columns for id, habit_id, date, and is_checked. Use the Supabase UI or SQL queries to create these tables."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.703427"], ["updated_at", "2026-06-01 19:33:30.703427"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (22.0ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 7], ["repo", "backend"], ["title", "Create database schema validation"], ["body", "Create schema validation for the database tables using Zod. Define types for each table and validate data before inserting into the database."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.730218"], ["updated_at", "2026-06-01 19:33:30.730218"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (22.7ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 4], ["number", 3], ["title", "Authentication"], ["description", "Implementing user authentication"], ["position", 2], ["created_at", "2026-06-01 19:33:30.755918"], ["updated_at", "2026-06-01 19:33:30.755918"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (25.3ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 8], ["repo", "backend"], ["title", "Implement user authentication API"], ["body", "Implement API endpoints for user authentication: /register, /login, and /logout. Use Supabase authentication. The /register endpoint should create a new user in the database. The /login endpoint should authenticate the user and return a token. The /logout endpoint should invalidate the token."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.782291"], ["updated_at", "2026-06-01 19:33:30.782291"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (24.3ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 8], ["repo", "frontend"], ["title", "Implement user authentication in frontend"], ["body", "Implement user authentication in the frontend using the API endpoints created in the backend. Create a login and register page. Use the 'fetch' API to make requests to the backend API endpoints."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.809934"], ["updated_at", "2026-06-01 19:33:30.809934"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (24.4ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 4], ["number", 4], ["title", "Habit Creation"], ["description", "Implementing habit creation"], ["position", 3], ["created_at", "2026-06-01 19:33:30.836963"], ["updated_at", "2026-06-01 19:33:30.836963"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (24.7ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 9], ["repo", "backend"], ["title", "Implement habit creation API"], ["body", "Implement API endpoint for creating habits: /habits. The endpoint should create a new habit in the database for the authenticated user."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.868314"], ["updated_at", "2026-06-01 19:33:30.868314"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (25.2ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 9], ["repo", "frontend"], ["title", "Implement habit creation in frontend"], ["body", "Implement habit creation in the frontend using the API endpoint created in the backend. Create a new page for creating habits. Use the 'fetch' API to make requests to the backend API endpoint."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.896386"], ["updated_at", "2026-06-01 19:33:30.896386"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mPhase Create (23.0ms)[0m  [1m[32mINSERT INTO "phases" ("project_id", "number", "title", "description", "position", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["project_id", 4], ["number", 5], ["title", "Habit Tracking"], ["description", "Implementing habit tracking"], ["position", 4], ["created_at", "2026-06-01 19:33:30.925691"], ["updated_at", "2026-06-01 19:33:30.925691"]]
+  ↳ app/services/ticket_generator.rb:105:in `block (2 levels) in persist!'
+  [1m[36mTicket Create (24.5ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 10], ["repo", "backend"], ["title", "Implement habit check API"], ["body", "Implement API endpoint for checking habits: /habits/:id/check. The endpoint should create a new habit check in the database for the authenticated user and the habit with the given id."], ["position", 0], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.952492"], ["updated_at", "2026-06-01 19:33:30.952492"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (22.4ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 10], ["repo", "frontend"], ["title", "Implement habit tracking in frontend"], ["body", "Implement habit tracking in the frontend using the API endpoint created in the backend. Create a new page for displaying habits and checking them off. Use the 'fetch' API to make requests to the backend API endpoint."], ["position", 1], ["status", "pending"], ["created_at", "2026-06-01 19:33:30.980256"], ["updated_at", "2026-06-01 19:33:30.980256"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTicket Create (23.5ms)[0m  [1m[32mINSERT INTO "tickets" ("phase_id", "repo", "title", "body", "position", "status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["phase_id", 10], ["repo", "frontend"], ["title", "Implement streak counter and weekly progress chart"], ["body", "Implement a streak counter and a weekly progress chart in the frontend. Use the data from the habit checks to calculate the streak and the progress. Use a charting library like Chart.js to display the progress chart."], ["position", 2], ["status", "pending"], ["created_at", "2026-06-01 19:33:31.006882"], ["updated_at", "2026-06-01 19:33:31.006882"]]
+  ↳ app/services/ticket_generator.rb:113:in `block (3 levels) in persist!'
+  [1m[36mTRANSACTION (23.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/ticket_generator.rb:101:in `persist!'
+  [1m[36mTicket Count (27.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "tickets" INNER JOIN "phases" ON "tickets"."phase_id" = "phases"."id" WHERE "phases"."project_id" = $1[0m  [["project_id", 4]]
+  ↳ app/services/ticket_generator.rb:41:in `call'
+  [1m[36mTRANSACTION (25.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/ticket_generator.rb:39:in `call'
+  [1m[36mProject Update (50.3ms)[0m  [1m[33mUPDATE "projects" SET "status" = $1, "updated_at" = $2, "ticket_count" = $3, "last_generated_at" = $4 WHERE "projects"."id" = $5[0m  [["status", "ready"], ["updated_at", "2026-06-01 19:33:31.097633"], ["ticket_count", 12], ["last_generated_at", "2026-06-01 19:33:31.096461"], ["id", 4]]
+  ↳ app/services/ticket_generator.rb:39:in `call'
+  [1m[36mTRANSACTION (25.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/ticket_generator.rb:39:in `call'
+  [1m[36mTicket Load (23.9ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 6]]
+  ↳ app/controllers/api/v1/projects_controller.rb:54:in `generate'
+  [1m[36mTicket Load (24.6ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 7]]
+  ↳ app/controllers/api/v1/projects_controller.rb:54:in `generate'
+  [1m[36mTicket Load (29.7ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 8]]
+  ↳ app/controllers/api/v1/projects_controller.rb:54:in `generate'
+  [1m[36mTicket Load (26.0ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 9]]
+  ↳ app/controllers/api/v1/projects_controller.rb:54:in `generate'
+  [1m[36mTicket Load (23.5ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" = $1 ORDER BY "tickets"."position" ASC[0m  [["phase_id", 10]]
+  ↳ app/controllers/api/v1/projects_controller.rb:54:in `generate'
+Completed 200 OK in 4130ms (Views: 0.4ms | ActiveRecord: 870.0ms | Allocations: 31263)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:33:55 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:33:55 -0400
+Processing by Api::V1::UsersController#show as HTML
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (24.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 55ms (Views: 2.1ms | ActiveRecord: 24.6ms | Allocations: 1444)
+
+
+  [1m[36mUser Load (26.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (26.2ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 111ms (Views: 0.4ms | ActiveRecord: 52.5ms | Allocations: 2359)
+
+
+Started GET "/api/v1/projects/4" for ::1 at 2026-06-01 15:34:04 -0400
+Processing by Api::V1::ProjectsController#show as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mUser Load (25.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (26.4ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+  [1m[36mPhase Load (26.2ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 4]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+  [1m[36mTicket Load (27.7ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" IN ($1, $2, $3, $4, $5) ORDER BY "tickets"."position" ASC[0m  [["phase_id", 6], ["phase_id", 7], ["phase_id", 8], ["phase_id", 9], ["phase_id", 10]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+Completed 200 OK in 192ms (Views: 0.3ms | ActiveRecord: 105.3ms | Allocations: 4791)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:35:15 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:35:15 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (22.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 50ms (Views: 0.3ms | ActiveRecord: 22.8ms | Allocations: 876)
+
+
+  [1m[36mUser Load (25.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (24.9ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 84ms (Views: 0.2ms | ActiveRecord: 50.8ms | Allocations: 2896)
+
+
+Started GET "/api/v1/projects/4" for ::1 at 2026-06-01 15:35:27 -0400
+Processing by Api::V1::ProjectsController#show as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mUser Load (26.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (24.8ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+  [1m[36mPhase Load (23.7ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 4]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+  [1m[36mTicket Load (27.7ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" IN ($1, $2, $3, $4, $5) ORDER BY "tickets"."position" ASC[0m  [["phase_id", 6], ["phase_id", 7], ["phase_id", 8], ["phase_id", 9], ["phase_id", 10]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+Completed 200 OK in 142ms (Views: 0.3ms | ActiveRecord: 103.1ms | Allocations: 4617)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:35:48 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:35:48 -0400
+Processing by Api::V1::UsersController#show as HTML
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (25.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mUser Load (25.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 56ms (Views: 0.3ms | ActiveRecord: 25.1ms | Allocations: 2223)
+
+
+  [1m[36mProject Load (22.4ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 76ms (Views: 0.4ms | ActiveRecord: 47.3ms | Allocations: 2340)
+
+
+Started GET "/api/v1/projects/4" for ::1 at 2026-06-01 15:36:11 -0400
+Processing by Api::V1::ProjectsController#show as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mUser Load (23.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (24.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 AND "projects"."id" = $2 LIMIT $3[0m  [["user_id", 3], ["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+  [1m[36mPhase Load (22.9ms)[0m  [1m[34mSELECT "phases".* FROM "phases" WHERE "phases"."project_id" = $1 ORDER BY "phases"."position" ASC[0m  [["project_id", 4]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+  [1m[36mTicket Load (26.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."phase_id" IN ($1, $2, $3, $4, $5) ORDER BY "tickets"."position" ASC[0m  [["phase_id", 6], ["phase_id", 7], ["phase_id", 8], ["phase_id", 9], ["phase_id", 10]]
+  ↳ app/controllers/api/v1/projects_controller.rb:12:in `show'
+Completed 200 OK in 129ms (Views: 0.6ms | ActiveRecord: 96.9ms | Allocations: 4610)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:38:31 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:38:31 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (24.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mUser Load (25.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 58ms (Views: 0.4ms | ActiveRecord: 25.9ms | Allocations: 1576)
+
+
+  [1m[36mProject Load (23.6ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 82ms (Views: 0.1ms | ActiveRecord: 48.2ms | Allocations: 2903)
+
+
+Started GET "/lost-route-for-qa" for ::1 at 2026-06-01 15:55:19 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/lost-route-for-qa"):
+  
+Started GET "/favicon.ico" for ::1 at 2026-06-01 15:55:19 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/lost-route-for-qa" for ::1 at 2026-06-01 15:55:56 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/lost-route-for-qa"):
+  
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:57:54 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:57:54 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (26.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (23.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (23.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 949ms (Views: 0.4ms | ActiveRecord: 493.2ms | Allocations: 38869)
+
+
+  [1m[36mUser Load (25.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 1158ms (Views: 0.2ms | ActiveRecord: 267.2ms | Allocations: 41915)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 15:59:06 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 15:59:06 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (24.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 53ms (Views: 0.4ms | ActiveRecord: 24.2ms | Allocations: 893)
+
+
+  [1m[36mUser Load (28.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (30.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 120ms (Views: 0.1ms | ActiveRecord: 58.9ms | Allocations: 2955)
+
+
