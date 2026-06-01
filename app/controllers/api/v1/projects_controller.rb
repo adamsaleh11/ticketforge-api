@@ -54,18 +54,6 @@ module Api
           :name, :description, :github_repo_full_name, :llm_provider, :llm_model
         )
       end
-
-      # JSON:API error objects with a field pointer per validation error, so the
-      # frontend can map each error back to its form input.
-      def render_validation_errors(project)
-        errors = project.errors.map do |error|
-          {
-            source: { pointer: "/data/attributes/#{error.attribute}" },
-            detail: error.message
-          }
-        end
-        render json: { errors: errors }, status: :unprocessable_entity
-      end
     end
   end
 end

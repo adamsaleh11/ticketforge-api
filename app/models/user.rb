@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   validates :supabase_user_id, presence: true, uniqueness: true
   validates :email, presence: true
+  validate :ollama_endpoint_is_http_url
 
   # Find-or-create the user identified by a verified Supabase JWT payload,
   # keeping profile fields in sync with the token's claims.
@@ -25,6 +26,21 @@ class User < ApplicationRecord
   rescue ActiveRecord::RecordNotUnique
     find_by!(supabase_user_id: metadata.supabase_user_id)
   end
+
+  private
+
+  # Guarantees a stored ollama_endpoint is always something the HTTP client can
+  # actually attempt to connect to: a well-formed http/https URL with a host.
+  # Parsing (not a loose regex) so the check matches what HTTParty will dial.
+  def ollama_endpoint_is_http_url
+    uri = URI.parse(ollama_endpoint.to_s)
+    valid = uri.is_a?(URI::HTTP) && uri.host.present?
+    errors.add(:ollama_endpoint, "must be a valid http or https URL") unless valid
+  rescue URI::InvalidURIError
+    errors.add(:ollama_endpoint, "must be a valid http or https URL")
+  end
+
+  public
 
   # Reads the TicketForge-relevant claims out of a Supabase JWT payload, hiding
   # the layout of user_metadata / app_metadata behind named accessors.

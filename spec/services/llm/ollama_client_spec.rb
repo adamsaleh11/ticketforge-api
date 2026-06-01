@@ -113,4 +113,50 @@ RSpec.describe LLM::OllamaClient do
       expect(WebMock).to have_requested(:post, default_url).twice
     end
   end
+
+  describe "#list_models" do
+    let(:tags_url) { "http://localhost:11434/api/tags" }
+
+    subject(:client) { described_class.new(endpoint: nil) }
+
+    it "returns the installed model names from /api/tags" do
+      stub_request(:get, tags_url).to_return(
+        status: 200,
+        body: { "models" => [{ "name" => "llama3:latest" }, { "name" => "qwen2:7b" }] }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+
+      expect(client.list_models).to eq(["llama3:latest", "qwen2:7b"])
+    end
+
+    it "queries a custom endpoint's /api/tags" do
+      custom = "http://ollama.internal:9999"
+      stub_request(:get, "#{custom}/api/tags").to_return(
+        status: 200, body: { "models" => [] }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+
+      described_class.new(endpoint: custom).list_models
+
+      expect(WebMock).to have_requested(:get, "#{custom}/api/tags")
+    end
+
+    it "raises InvalidResponseError on a non-2xx response" do
+      stub_request(:get, tags_url).to_return(status: 500, body: "boom")
+
+      expect { client.list_models }.to raise_error(LLM::InvalidResponseError)
+    end
+
+    it "raises InvalidResponseError on an unparseable body" do
+      stub_request(:get, tags_url).to_return(status: 200, body: "not json")
+
+      expect { client.list_models }.to raise_error(LLM::InvalidResponseError)
+    end
+
+    it "raises ConnectionError on a transport failure" do
+      stub_request(:get, tags_url).to_timeout
+
+      expect { client.list_models }.to raise_error(LLM::ConnectionError)
+    end
+  end
 end

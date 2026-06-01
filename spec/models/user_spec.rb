@@ -1,6 +1,22 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
+  describe "ollama_endpoint validation" do
+    %w[http://localhost:11434 https://ollama.example.com http://ollama.internal:9999].each do |good|
+      it "accepts #{good.inspect}" do
+        expect(build(:user, ollama_endpoint: good)).to be_valid
+      end
+    end
+
+    ["not-a-url", "ftp://ollama", "http://", "  "].each do |bad|
+      it "rejects #{bad.inspect}" do
+        user = build(:user, ollama_endpoint: bad)
+        expect(user).not_to be_valid
+        expect(user.errors[:ollama_endpoint]).to include("must be a valid http or https URL")
+      end
+    end
+  end
+
   describe ".from_supabase_payload" do
     def payload(overrides = {})
       {

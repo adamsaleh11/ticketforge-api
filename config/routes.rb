@@ -14,10 +14,26 @@ Rails.application.routes.draw do
   # (auth, projects, tickets, ...). See CLAUDE.md routing rules.
   namespace :api do
     namespace :v1 do
-      # Current authenticated user's profile.
-      get "me", to: "users#show"
+      # Current authenticated user's profile. PATCH syncs the GitHub OAuth token
+      # the frontend reads from the Supabase session (provider_token), which is
+      # never present in the JWT itself.
+      get   "me", to: "users#show"
+      patch "me", to: "users#update"
 
       resources :projects, only: %i[index show create update destroy]
+
+      # User-level Ollama configuration: save the endpoint, then test connectivity.
+      namespace :settings do
+        patch "ollama",      to: "ollama#update"
+        post  "ollama/test", to: "ollama#test"
+      end
+
+      # Read-only GitHub access on behalf of the signed-in user. Explicit routes
+      # (not resources) because :owner/:repo/context is a two-segment path.
+      namespace :github do
+        get "repos",                       to: "repos#index"
+        get "repos/:owner/:repo/context",  to: "repos#context"
+      end
     end
   end
 end
