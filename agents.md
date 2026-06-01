@@ -1,68 +1,135 @@
-# TicketForge API — Agent Instructions
+# TicketForge Web — Agent Instructions
 
 ## What this repo is
-Rails 7 API-only backend for TicketForge. Generates phased engineering tickets from a project description using LLMs (Groq or Ollama). Read-only GitHub integration for repo context. JWT auth.
 
-Frontend lives in a separate repo: `ticketforge-web` (Next.js). This repo never serves HTML — JSON only.
+Next.js 14 (App Router) frontend for TicketForge. Users sign in with GitHub via Supabase Auth, describe a project, optionally link a GitHub repo, pick an LLM provider (Groq or local Ollama), and get back phased engineering tickets they can copy-paste into Claude Code or Codex.
+
+**Auth is Supabase.** Sign-in is GitHub-only via Supabase OAuth. The Supabase session token is sent to the Rails backend as a Bearer token; Rails verifies it.
+
+Backend lives in `ticketforge-api`. All app data comes from `NEXT_PUBLIC_API_URL`. Auth comes from Supabase directly.
 
 ## Stack
-- Ruby 3.2+, Rails 7.1+ (API-only)
-- PostgreSQL via Supabase (connection over SSL)
-- Devise + devise-jwt for auth
-- HTTParty / Faraday for external HTTP (Groq, Ollama, GitHub)
-- RSpec for tests, WebMock for HTTP stubbing
-- Deployed on Render free tier
 
-## Project structure conventions
+- Next.js 14 App Router, TypeScript strict mode
+- Tailwind CSS + shadcn/ui (install per-component)
+- `@supabase/supabase-js` + `@supabase/ssr` for auth
+- Zustand for lightweight client state
+- TanStack Query for server state
+- axios for API calls (auth interceptor attaches Supabase session token)
+- react-hook-form + zod for forms
+- Deployed on Vercel free tier
+
+## Design system — galaxy aesthetic
+
+This is the product's soul. Don't water it down.
+
+**Palette (Tailwind config):**
+
+- `background`: `#0a0e27` (deep space navy)
+- `foreground`: `#e4e6f1`
+- `primary`: `#8b5cf6` (violet)
+- `accent`: `#c084fc` (light violet)
+- `muted`: `#1a1f3a`
+- `border`: `rgba(139, 92, 246, 0.2)`
+
+**Typography:**
+
+- Headings: Space Grotesk
+- Body: Inter
+
+**Recurring elements:**
+
+- `<Starfield />` canvas component — 200 twinkling particles, slow drift, fixed at `z-index: -10` in root layout.
+- Radial nebula gradient overlay (purple → transparent) on root layout.
+- Glassmorphism: `bg-white/5 backdrop-blur-md border border-white/10` — use for cards, modals, navbars.
+- Violet glow on primary CTAs: `shadow-[0_0_30px_rgba(139,92,246,0.5)]`.
+- Repo badges: frontend=violet, backend=blue, fullstack=violet→blue gradient, devops=orange.
+
+## Project structure
 
 ```
 app/
-  controllers/
-    api/v1/         # All JSON endpoints versioned under /api/v1
-    auth/           # Devise overrides (signup, login, logout, me)
-  models/           # ActiveRecord, thin
-  serializers/      # jsonapi-serializer, one per model
-  services/
-    llm/            # LLMClient factory + Groq/Ollama implementations
-    github/         # RepoContext builder
-    ticket_generator/  # Orchestration + prompts
+  (auth)/login                   # Full-screen galaxy, glassmorphic card
+  auth/callback                  # Supabase OAuth return
+  (app)/
+    dashboard
+    projects/[id]
+    settings
+    layout.tsx                   # Top nav, requires session
+  layout.tsx                     # Root — mounts <Starfield />
+  middleware.ts                  # Session refresh + route protection
+components/
+  ui/                            # shadcn — do not edit after install
+  shared/                        # Starfield, GlassCard, RepoBadge, etc.
+  features/                      # NewProjectDialog, TicketCard, OllamaSetupWizard, etc.
+lib/
+  supabase/
+    client.ts                    # Browser client
+    server.ts                    # Server client (SSR cookies)
+  api.ts                         # axios instance + auth interceptor
+  hooks/                         # useAuth, useProjects, useTickets, etc.
+stores/                          # Zustand (auth UI state only)
 ```
 
 ## Hard rules
-1. **No business logic in controllers.** Controllers parse params, call a service or model method, render JSON. That's it.
-2. **All endpoints under `/api/v1`** except `/health`, `/signup`, `/login`, `/logout`.
-3. **Always scope queries by `current_user`.** Use `current_user.projects.find(params[:id])`, never `Project.find`. This is the authorization layer — don't break it.
-4. **Strong params always.** No `params.permit!`.
-5. **Encrypted attributes** for any third-party token (GitHub token, future API keys). Use Rails' `encrypts :field` macro.
-6. **Migrations are reversible.** Use `change` with reversible blocks or explicit `up`/`down`.
-7. **Specs required** for every new endpoint. Happy path + unauthorized + validation failure. Minimum.
-8. **No N+1 queries.** Use `includes` when serializing collections. Add Bullet gem in development if helpful.
 
-## LLM integration rules
-- Never call Groq or Ollama directly from a controller. Always go through `LLM::Client.for(...)`.
-- LLM responses must be validated before persisting. If JSON parsing fails or schema doesn't match, raise `LLM::InvalidResponseError` and surface a clean error to the user.
-- 60s timeout, 1 retry on connection errors only. Never retry on 4xx.
-- `TicketGenerator` runs synchronously (Render free tier has no background workers). Expect 30–60s requests. Set controller timeout accordingly.
+### TypeScript
 
-## GitHub integration rules
-- Read-only. Scopes: `public_repo`, `read:user`. Never request write scopes even if asked.
-- Cache repo trees in `Rails.cache` for 10 minutes per repo to stay under GitHub rate limits.
-- Filter file trees: exclude `node_modules`, `.git`, `dist`, `build`, `vendor`, `*.lock`, images, fonts, anything over 100KB.
+1. Strict mode. No `any` unless explicitly justified in a comment.
 
-## Testing
-- Run: `bundle exec rspec`
-- Stub all external HTTP with WebMock. Never hit Groq / Ollama / GitHub in tests.
-- Factory Bot for fixtures.
+### Auth
 
-## Env vars (see `.env.example`)
-`DATABASE_URL`, `DEVISE_JWT_SECRET_KEY`, `GROQ_API_KEY`, `FRONTEND_URL`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `RAILS_MASTER_KEY`
+2. Sign-in is **GitHub OAuth via Supabase only**. No email/password. No other providers.
+3. Request scopes: `public_repo read:user`. These come back in the Supabase session and Rails extracts them as `github_access_token`.
+4. Use `@supabase/ssr` for the Next.js middleware-based session refresh pattern. Don't roll your own cookie management.
+5. axios interceptor reads the session token via `supabase.auth.getSession()` and attaches as `Authorization: Bearer {token}`.
+6. On 401 from backend: sign out via Supabase + redirect to /login.
+
+### State management
+
+7. **Server state = TanStack Query.** Never put server data in Zustand.
+8. **Zustand = ephemeral client state only** (modal open/close that needs cross-component access, draft form data across steps).
+9. **Auth state = Supabase client directly.** Use the `useAuth()` hook wrapping `supabase.auth.getSession()`.
+10. Query keys are tuples: `['projects']`, `['project', id]`, `['github', 'repos']`.
+
+### API calls
+
+11. All API calls go through `lib/api.ts`. No bare `fetch` for app data.
+12. Auth-related calls (sign in, sign out) go through the Supabase client, not axios.
+
+### Forms
+
+13. `react-hook-form` + `zod` resolver. No uncontrolled inputs. No `useState` for form fields.
+
+### UX
+
+14. **Loading states everywhere.** Every async UI element gets a shadcn `Skeleton` or spinner.
+15. **Mobile responsive.** Test at 375px. Cards stack, nav collapses.
+16. **Accessibility:** keyboard nav for all interactive elements, aria-labels on icons, WCAG AA contrast.
+
+### shadcn
+
+17. Install components as needed: `npx shadcn@latest add <component>`.
+18. Don't edit `components/ui/` files after install. Style via CSS vars in `globals.css`.
+19. Wrap shadcn components in feature components for business logic — keep `ui/` pure.
+
+## Env vars
+
+- `NEXT_PUBLIC_API_URL` — Rails backend URL (http://localhost:3001 in dev, Render URL in prod)
+- `NEXT_PUBLIC_SUPABASE_URL` — Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase anon/public key
 
 ## What NOT to do
-- Don't add Redis. Use `Rails.cache` (memory store in dev, Render disk in prod) or `solid_cache` if needed later.
-- Don't add Sidekiq or any background job framework. Synchronous only for now.
-- Don't introduce GraphQL. REST only.
-- Don't add new gems without asking — the dependency list is intentionally small.
-- Don't change the auth strategy. Devise + JWT stays.
+
+- **Don't use the Next.js Pages Router.** App Router only.
+- **Don't add email/password sign-in.** GitHub OAuth via Supabase only.
+- Don't add Redux, Jotai, Recoil, or any state library beyond Zustand + TanStack Query.
+- Don't add a CSS-in-JS library. Tailwind only.
+- Don't ship without loading skeletons.
+- Don't break the galaxy aesthetic. If a component looks generic shadcn-default, add the violet, glassmorphism, glow.
+- Don't fetch in server components for this MVP — keep everything client-side via TanStack Query.
+- Don't store the Supabase session in localStorage manually. Let `@supabase/ssr` handle cookie-based storage.
 
 ## When stuck
-Ask before guessing. Especially around: auth flows, serializer shape changes, migration design on existing tables.
+
+Ask before guessing. Especially around: Supabase session refresh in middleware, OAuth redirect URLs, query invalidation patterns, Supabase RLS (we're not using RLS — all auth is in Rails).
