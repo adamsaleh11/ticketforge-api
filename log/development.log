@@ -5483,3 +5483,84 @@ Completed 200 OK in 53ms (Views: 0.4ms | ActiveRecord: 24.2ms | Allocations: 893
 Completed 200 OK in 120ms (Views: 0.1ms | ActiveRecord: 58.9ms | Allocations: 2955)
 
 
+Started GET "/api/v1/me" for ::1 at 2026-06-01 16:09:07 -0400
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (27.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 540ms (Views: 0.8ms | ActiveRecord: 263.2ms | Allocations: 4677)
+
+
+Started GET "/settings" for ::1 at 2026-06-01 16:12:01 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/settings"):
+  
+Started GET "/settings" for ::1 at 2026-06-01 16:12:21 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/settings"):
+  
+Started HEAD "/settings" for 127.0.0.1 at 2026-06-01 16:12:27 -0400
+  
+ActionController::RoutingError (No route matches [HEAD] "/settings"):
+  
+Started HEAD "/settings" for ::1 at 2026-06-01 16:12:27 -0400
+  
+ActionController::RoutingError (No route matches [HEAD] "/settings"):
+  
+[dotenv] Set [36mDATABASE_URL[0m, [36mSUPABASE_URL[0m, [36mSUPABASE_JWT_SECRET[0m, [36mGROQ_API_KEY[0m, [36mFRONTEND_URL[0m, [36mACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY[0m, [36mACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT[0m
+[dotenv] Loaded [33m.env[0m
+Started GET "/api/v1/me" for ::1 at 2026-06-01 16:14:14 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 16:14:14 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (27.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (22.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mProject Load (21.9ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 1052ms (Views: 0.7ms | ActiveRecord: 430.6ms | Allocations: 38815)
+
+
+  [1m[36mUser Load (25.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 1291ms (Views: 0.5ms | ActiveRecord: 259.3ms | Allocations: 41908)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 16:14:45 -0400
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (24.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 57ms (Views: 0.3ms | ActiveRecord: 24.6ms | Allocations: 886)
+
+
+Started GET "/api/v1/me" for ::1 at 2026-06-01 16:14:58 -0400
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 16:14:58 -0400
+Processing by Api::V1::UsersController#show as HTML
+Processing by Api::V1::ProjectsController#index as HTML
+  [1m[36mUser Load (25.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  [1m[36mUser Load (26.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 74ms (Views: 0.1ms | ActiveRecord: 26.0ms | Allocations: 2183)
+
+
+  [1m[36mProject Load (21.8ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 95ms (Views: 0.1ms | ActiveRecord: 47.7ms | Allocations: 2347)
+
+
+Started GET "/api/v1/projects" for ::1 at 2026-06-01 16:19:54 -0400
+Started GET "/api/v1/me" for ::1 at 2026-06-01 16:19:54 -0400
+Processing by Api::V1::ProjectsController#index as HTML
+Processing by Api::V1::UsersController#show as HTML
+  [1m[36mUser Load (22.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+  [1m[36mUser Load (26.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."supabase_user_id" = $1 LIMIT $2[0m  [["supabase_user_id", "53c19304-62cb-454f-a7f2-be9cf9b0a5c3"], ["LIMIT", 1]]
+  ↳ app/models/user.rb:19:in `from_supabase_payload'
+Completed 200 OK in 56ms (Views: 0.2ms | ActiveRecord: 26.1ms | Allocations: 1575)
+
+
+  [1m[36mProject Load (21.3ms)[0m  [1m[34mSELECT "projects".* FROM "projects" WHERE "projects"."user_id" = $1 ORDER BY "projects"."created_at" DESC[0m  [["user_id", 3]]
+  ↳ app/controllers/api/v1/projects_controller.rb:7:in `index'
+Completed 200 OK in 83ms (Views: 0.2ms | ActiveRecord: 43.8ms | Allocations: 2892)
+
+
